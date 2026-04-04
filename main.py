@@ -60,7 +60,8 @@ def client_fn(context):
 
 # Server function
 def server_fn(context):
-    strategy = get_strategy(min_clients=NUM_CLIENTS)
+    filename = f"evaluation/{DATASET.lower()}_{MODEL.lower()}_iid_results.json"
+    strategy = get_strategy(min_clients=NUM_CLIENTS, filename=filename)
     config = fl.server.ServerConfig(num_rounds=NUM_ROUNDS)
     return fl.server.ServerAppComponents(strategy=strategy, config=config)
 
@@ -68,24 +69,11 @@ def server_fn(context):
 client_app = fl.client.ClientApp(client_fn=client_fn)
 server_app = fl.server.ServerApp(server_fn=server_fn)
 
-history = fl.simulation.run_simulation(
+fl.simulation.run_simulation(
     server_app=server_app,
     client_app=client_app,
     num_supernodes=NUM_CLIENTS,
     backend_config={"client_resources": {"num_cpus": 1}}
 )
 
-# Save results
-os.makedirs("evaluation", exist_ok=True)
-
-if history is not None:
-    results = {
-        "loss": history.losses_distributed,
-        "accuracy": history.metrics_distributed_evaluate["accuracy"]
-    }
-    filename = f"evaluation/{DATASET.lower()}_{MODEL.lower()}_iid_results.json"
-    with open(filename, "w") as f:
-        json.dump(results, f)
-    print(f"Results saved to {filename}")
-else:
-    print("Warning: history is None, results not saved")
+print(f"Done. Results saved to evaluation/{DATASET.lower()}_{MODEL.lower()}_iid_results.json")
