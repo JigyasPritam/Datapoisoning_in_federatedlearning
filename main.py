@@ -42,6 +42,17 @@ indices = np.arange(len(train_ds))
 rng.shuffle(indices)
 client_indices = np.array_split(indices, NUM_CLIENTS)
 
+# # Non-IID partition
+# labels = np.array(train_ds.targets)
+# indices = np.arange(len(train_ds))
+# sorted_indices = indices[np.argsort(labels)]
+# num_shards = NUM_CLIENTS * 2
+# shard_size = len(train_ds) // num_shards
+# shards = [sorted_indices[i * shard_size:(i + 1) * shard_size] for i in range(num_shards)]
+# rng = np.random.default_rng(SEED)
+# rng.shuffle(shards)
+# client_indices = [np.concatenate(shards[i*2:(i+1)*2]) for i in range(NUM_CLIENTS)]
+
 # Client function
 def client_fn(context):
     cid = int(context.node_config["partition-id"])
@@ -61,6 +72,7 @@ def client_fn(context):
 # Server function
 def server_fn(context):
     filename = f"evaluation/{DATASET.lower()}_{MODEL.lower()}_iid_results.json"
+    # filename = f"evaluation/{DATASET.lower()}_{MODEL.lower()}_noniid_results.json"
     strategy = get_strategy(min_clients=NUM_CLIENTS, filename=filename)
     config = fl.server.ServerConfig(num_rounds=NUM_ROUNDS)
     return fl.server.ServerAppComponents(strategy=strategy, config=config)
