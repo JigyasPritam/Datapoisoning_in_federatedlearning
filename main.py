@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader, Subset
 from torchvision import datasets, transforms
 import json
 import os
-
+import ray
 from model.net import MLP, CNN
 from client.flower_client import FlowerClient
 from server.strategy import get_strategy
@@ -36,6 +36,23 @@ elif DATASET == "EMNIST":
     train_ds = datasets.EMNIST(root="./data", split="byclass", train=True, download=True, transform=transform)
     test_ds = datasets.EMNIST(root="./data", split="byclass", train=False, download=True, transform=transform)
 
+
+# Stratified subset for EMNIST (reduces memory usage)
+if DATASET == "EMNIST":
+    from collections import defaultdict
+    def stratified_subset(dataset, total_size, seed=42):
+        rng_s = np.random.default_rng(seed)
+        labels = np.array(dataset.targets)
+        classes = np.unique(labels)
+        per_class = total_size // len(classes)
+        selected = []
+        for cls in classes:
+            cls_indices = np.where(labels == cls)[0]
+            chosen = rng_s.choice(cls_indices, min(per_class, len(cls_indices)), replace=False)
+            selected.extend(chosen.tolist())
+        return Subset(dataset, selected)
+    train_ds = stratified_subset(train_ds, 60000)
+    
 #Enable this for IID partition
 # IID partition
 rng = np.random.default_rng(SEED)
@@ -89,13 +106,16 @@ def server_fn(context):
 client_app = fl.client.ClientApp(client_fn=client_fn)
 server_app = fl.server.ServerApp(server_fn=server_fn)
 
+
+ray.init(num_cpus=8, object_store_memory=2 * 1024 * 1024 * 1024)  # 2GB object store
+
+
 fl.simulation.run_simulation(
     server_app=server_app,
     client_app=client_app,
     num_supernodes=NUM_CLIENTS,
     backend_config={"client_resources": {"num_cpus": 2}}
 )
-
 # print(f"Done. Results saved to evaluation/{DATASET.lower()}_{MODEL.lower()}_iid_results.json")
 # print(f"Done. Results saved to evaluation/{DATASET.lower()}_{MODEL.lower()}_noniid_results.json")
 print(f"Done. Results saved to evaluation/{DATASET.lower()}_{MODEL.lower()}_iid_results.json")
