@@ -14,9 +14,9 @@ from server.strategy import get_strategy
 NUM_CLIENTS = 10
 NUM_ROUNDS = 20
 BATCH_SIZE = 32
-DATASET = "MNIST"  # change to "EMNIST" for EMNIST
+DATASET = "EMNIST"  # change to "EMNIST" for EMNIST
 MODEL = "MLP"      # change to "CNN" for CNN
-NUM_CLASSES = 10   # 10 for MNIST, 62 for EMNIST
+NUM_CLASSES = 62   # 10 for MNIST, 62 for EMNIST
 SEED = 42
 DEVICE = torch.device("cpu")
 
@@ -36,12 +36,15 @@ elif DATASET == "EMNIST":
     train_ds = datasets.EMNIST(root="./data", split="byclass", train=True, download=True, transform=transform)
     test_ds = datasets.EMNIST(root="./data", split="byclass", train=False, download=True, transform=transform)
 
+#Enable this for IID partition
 # IID partition
 rng = np.random.default_rng(SEED)
 indices = np.arange(len(train_ds))
 rng.shuffle(indices)
 client_indices = np.array_split(indices, NUM_CLIENTS)
 
+
+#Enable this for Non-IID partition
 # # Non-IID partition
 # labels = np.array(train_ds.targets)
 # indices = np.arange(len(train_ds))
@@ -71,8 +74,13 @@ def client_fn(context):
 
 # Server function
 def server_fn(context):
-    filename = f"evaluation/{DATASET.lower()}_{MODEL.lower()}_iid_results.json"
+    # filename = f"evaluation/{DATASET.lower()}_{MODEL.lower()}_iid_results.json"
     # filename = f"evaluation/{DATASET.lower()}_{MODEL.lower()}_noniid_results.json"
+    filename = f"evaluation/{DATASET.lower()}_{MODEL.lower()}_iid_results.json"
+    
+    
+    
+    
     strategy = get_strategy(min_clients=NUM_CLIENTS, filename=filename)
     config = fl.server.ServerConfig(num_rounds=NUM_ROUNDS)
     return fl.server.ServerAppComponents(strategy=strategy, config=config)
@@ -85,7 +93,9 @@ fl.simulation.run_simulation(
     server_app=server_app,
     client_app=client_app,
     num_supernodes=NUM_CLIENTS,
-    backend_config={"client_resources": {"num_cpus": 1}}
+    backend_config={"client_resources": {"num_cpus": 2}}
 )
 
+# print(f"Done. Results saved to evaluation/{DATASET.lower()}_{MODEL.lower()}_iid_results.json")
+# print(f"Done. Results saved to evaluation/{DATASET.lower()}_{MODEL.lower()}_noniid_results.json")
 print(f"Done. Results saved to evaluation/{DATASET.lower()}_{MODEL.lower()}_iid_results.json")
