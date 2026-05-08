@@ -15,7 +15,7 @@ from model.net import MLP, CNN
 NUM_CLIENTS = 10
 NUM_ROUNDS  = 20
 BATCH_SIZE  = 32
-DATASET     = "EMNIST"   # "MNIST" or "EMNIST"
+DATASET     = "MNIST"   # "MNIST" or "EMNIST"
 MODEL       = "CNN"     # "MLP"   or "CNN"
 NUM_CLASSES = 62        # 10 for MNIST, 62 for EMNIST
 PARTITION   = "noniid"     # "iid"   or "noniid"
