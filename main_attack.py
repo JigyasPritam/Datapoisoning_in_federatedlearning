@@ -17,8 +17,8 @@ NUM_ROUNDS         = 20
 BATCH_SIZE         = 32
 DATASET            = "EMNIST"    # "MNIST" or "EMNIST"
 MODEL              = "MLP"      # "MLP"   or "CNN"
-NUM_CLASSES        = 62        # 10 for MNIST, 62 for EMNIST
-PARTITION          = "iid"      # "iid"   or "noniid"
+NUM_CLASSES        = 62         # 10 for MNIST, 62 for EMNIST
+PARTITION          = "noniid"      # "iid"   or "noniid"
 SEED               = 42
 DEVICE             = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 

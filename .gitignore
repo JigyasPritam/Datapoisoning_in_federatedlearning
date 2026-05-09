@@ -3,3 +3,5 @@ data/
 *.zip
 __pycache__/
 *.pyc
+pycache/
+*.py[cod]
