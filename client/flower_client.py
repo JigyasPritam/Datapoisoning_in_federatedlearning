@@ -1,3 +1,16 @@
+# ─────────────────────────────────────────────────────────────
+# NOTE: This Flower-based client implementation was the original
+# approach using flwr.client.NumPyClient and Ray simulation.
+# It was replaced by a manual sequential FL loop in main.py due
+# to the following technical constraints on Windows:
+#   1. flwr.simulation.run_simulation returns None on Windows
+#      (history object not accessible — results cannot be saved)
+#   2. Ray backend causes MemoryError with EMNIST (697k samples)
+#      due to parallel client processes exceeding available RAM
+# The manual implementation in main.py is mathematically
+# equivalent to this Flower approach using the same FedAvg logic.
+# Reference: McMahan et al. (2017) arXiv:1602.05629
+# ─────────────────────────────────────────────────────────────
 import flwr as fl
 import torch
 import torch.nn as nn

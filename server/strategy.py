@@ -1,3 +1,12 @@
+# ─────────────────────────────────────────────────────────────
+# NOTE: This Flower-based server strategy (FedAvgWithLogging)
+# was the original aggregation approach using flwr.server.strategy.FedAvg.
+# It was replaced by a manual fedavg() function in main.py due
+# to Windows compatibility issues with Ray-based simulation.
+# The FedAvgWithLogging class here correctly implements weighted
+# averaging and per-round logging — the same logic is used
+# manually in main.py's fedavg() function.
+# ─────────────────────────────────────────────────────────────
 import flwr as fl
 import json
 import os
