@@ -16,8 +16,9 @@ NUM_CLIENTS        = 10
 NUM_ROUNDS         = 20
 BATCH_SIZE         = 32
 DATASET            = "EMNIST"    # "MNIST" or "EMNIST"
-MODEL              = "MLP"      # "MLP"   or "CNN"
+MODEL              = "CNN"      # "MLP"   or "CNN"
 NUM_CLASSES        = 62         # 10 for MNIST, 62 for EMNIST
+PARTITION          = "iid"      # "iid"   or "noniid"
 PARTITION          = "iid"      # "iid"   or "noniid"
 SEED               = 42
 DEVICE             = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -35,6 +36,7 @@ TARGET_LABEL       = 1          # label to flip TO   (targeted only)
 #Save only for mnist_mlp_iid_attack_targeted_1, mnist_mlp_iid_attack_targeted_3 mnist_mlp_iid_attack_targeted_5
 # mnist_cnn_iid_attack_targeted_3 , and also for the EMNIST varients of these runs. 
 #----------------------------------------------
+SAVE_MODEL         = True
 SAVE_MODEL         = True
 
 print(f"Using device: {DEVICE}")
