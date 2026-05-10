@@ -23,8 +23,8 @@ SEED               = 42
 DEVICE             = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Attack config
-NUM_MALICIOUS      = 1         # number of malicious clients (try 1, 3, 5)
-ATTACK_TYPE        = "targeted" # "targeted" or "random"
+NUM_MALICIOUS      =  5       # number of malicious clients (try 1, 3, 5)
+ATTACK_TYPE        = "random" # "targeted" or "random"
 SOURCE_LABEL       = 7          # label to flip FROM (targeted only)
 TARGET_LABEL       = 1          # label to flip TO   (targeted only)
 
@@ -35,7 +35,7 @@ TARGET_LABEL       = 1          # label to flip TO   (targeted only)
 #Save only for mnist_mlp_iid_attack_targeted_1, mnist_mlp_iid_attack_targeted_3 mnist_mlp_iid_attack_targeted_5
 # mnist_cnn_iid_attack_targeted_3 , and also for the EMNIST varients of these runs. 
 #----------------------------------------------
-SAVE_MODEL         = False
+SAVE_MODEL         =False
 
 print(f"Using device: {DEVICE}")
 print(f"Dataset: {DATASET} | Model: {MODEL} | Partition: {PARTITION} | Clients: {NUM_CLIENTS} | Rounds: {NUM_ROUNDS}")
