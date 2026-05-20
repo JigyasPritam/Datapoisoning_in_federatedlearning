@@ -24,7 +24,7 @@ SEED               = 42
 DEVICE             = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Attack config
-NUM_MALICIOUS      = 3          # number of malicious clients
+NUM_MALICIOUS      = 3         # number of malicious clients
 ATTACK_TYPE        = "targeted" # "targeted" or "random"
 SOURCE_LABEL       = 7
 TARGET_LABEL       = 1
