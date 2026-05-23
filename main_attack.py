@@ -37,7 +37,6 @@ TARGET_LABEL       = 1          # label to flip TO   (targeted only)
 # mnist_cnn_iid_attack_targeted_3 , and also for the EMNIST varients of these runs. 
 #----------------------------------------------
 SAVE_MODEL         = True
-SAVE_MODEL         = True
 
 print(f"Using device: {DEVICE}")
 print(f"Dataset: {DATASET} | Model: {MODEL} | Partition: {PARTITION} | Clients: {NUM_CLIENTS} | Rounds: {NUM_ROUNDS}")
