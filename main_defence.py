@@ -16,9 +16,9 @@ from model.net import MLP, CNN
 NUM_CLIENTS        = 10
 NUM_ROUNDS         = 20
 BATCH_SIZE         = 32
-DATASET            = "MNIST"    # "MNIST" or "EMNIST"
+DATASET            = "EMNIST"    # "MNIST" or "EMNIST"
 MODEL              = "CNN"      # "MLP"   or "CNN"
-NUM_CLASSES        = 10         # 10 for MNIST, 62 for EMNIST
+NUM_CLASSES        = 62         # 10 for MNIST, 62 for EMNIST
 PARTITION          = "iid"      # "iid"   or "noniid"
 SEED               = 42
 DEVICE             = torch.device("cuda" if torch.cuda.is_available() else "cpu")
